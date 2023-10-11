@@ -27,7 +27,12 @@ var addCmd = &cobra.Command{
 		}
 
 		// Instantiate the video lib
-		videoLib := videos.NewVideos()
+		videoLib, err := videos.NewVideos()
+		if err != nil {
+			fmt.Printf("Something went wrong %v", err)
+			os.Exit(0)
+		}
+
 		ddbItem, err := videoLib.FindVideo(video)
 		if err != nil {
 			fmt.Printf("Something went wrong %v", err)
@@ -68,6 +73,13 @@ var addCmd = &cobra.Command{
 				fmt.Printf("Something went wrong %v", err)
 				os.Exit(0)
 			}
+		}
+
+		// Fetch again
+		ddbItem, err = videoLib.FindVideo(video)
+		if err != nil {
+			fmt.Printf("Something went wrong %v", err)
+			os.Exit(0)
 		}
 
 		fmt.Printf("Video \"%s\" was already added.\nPlease run \"view --video=url/id\" to check its details.\n", ddbItem.Title)

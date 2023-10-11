@@ -187,6 +187,11 @@ func IsEmptyValue(value reflect.Value) bool {
 			}
 		}
 		return true
+	case reflect.Slice:
+		if value.Len() > 0 {
+			return false
+		}
+		return true
 	default:
 		return true
 	}
