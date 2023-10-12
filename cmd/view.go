@@ -72,7 +72,7 @@ func renderVideoDetails(video videos.VideoDdbAttributes) {
 
 	// Check if there's previous item after the last item
 	beforeLastIndex := lastIndex - 1
-	if beforeLastIndex > 0 && beforeLastIndex < len(video.ViewLogs) {
+	if beforeLastIndex > -1 && beforeLastIndex < len(video.ViewLogs) {
 		beforeLastItem = video.ViewLogs[beforeLastIndex]
 	}
 
