@@ -57,6 +57,16 @@ func NewVideos() (*videos, error) {
 	return &videos{dynamodb: ddbSvc, youtube: youtubeLib}, nil
 }
 
+// Fetches all the stored videos records saved.
+func (v *videos) GetVideos() ([]VideoDdbAttributes, error) {
+	videos, err := v.dynamodb.GetAll()
+	if err != nil {
+		return []VideoDdbAttributes{}, err
+	}
+
+	return videos, nil
+}
+
 // Find a video record in the DynamoDB table
 func (v *videos) FindVideo(id string) (VideoDdbAttributes, error) {
 	// Check if the video already exists in DynamoDB

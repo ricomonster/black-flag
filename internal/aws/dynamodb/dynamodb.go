@@ -3,6 +3,7 @@ package dynamodb
 import (
 	"context"
 	"errors"
+	"fmt"
 	"log"
 	"reflect"
 	"time"
@@ -58,6 +59,31 @@ func (ddb *DynamoDB[_]) ListTables() ([]string, error) {
 	}
 
 	return tables, nil
+}
+
+// Get all items in the selected dynamodb table
+func (ddb *DynamoDB[T]) GetAll() ([]T, error) {
+	response, err := ddb.client.Scan(context.TODO(), &dynamodb.ScanInput{
+		TableName: aws.String(ddb.table),
+	})
+	if err != nil {
+		return []T{}, err
+	}
+
+	var results []T
+	for _, item := range response.Items {
+		var result T
+
+		err := attributevalue.UnmarshalMap(item, &result)
+		if err != nil {
+			fmt.Println(err)
+			continue
+		}
+
+		results = append(results, result)
+	}
+
+	return results, nil
 }
 
 // Find a record in the DynamoDB table using the primary key attribute value
